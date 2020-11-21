@@ -1,0 +1,37 @@
+INTERLUDE: THREAD API
+
+	Thread Creation:
+		- #include <pthread.h>
+		- Function Name: int pthread_create( .. .. ... );
+			-- Four arguments:
+				1. thread: pointer to a pthread_t data type.
+				2. attr: attr. of threads(default is NULL)
+				3. start_routine: function pointer of return type
+				   void * 
+				4. arg: argument passed to thread ( myarg_t type )
+			-- return type is integer
+		- Thread-completion: int pthread_join( .. ... ..)
+			-- Two arguments:
+				1. thread of pthread_t type
+				2. void **value_ptr ( myret_t type returned value )
+				
+				imp. never to return a value from thread stack.
+
+		- not all thread requires join operation.
+	
+	Mutual exclusion(LOCKS):
+		- int pthread_mutex_lock(pthread_mutex_t *mutex);
+		- int pthread_mutex_unlock(pthread_mutex_t *mutex);
+		- always intialize lock with PTHREAD_MUTEX_INTIALIZER
+		  dynamicall also we can used...
+		  
+		  int rc = pthread_mutex_init(&lock, NULL);
+		  assert(rc == 0);
+		- a corresponding call to pthread mutex destroy() should also 
+		  be made, when you are done with the lock;
+		  
+	Condition Variables:
+		- they are useful when signaling in between threads.
+		- int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t 
+		  *mutex);
+          int pthread_cond_signal(pthread_cond_t *cond);

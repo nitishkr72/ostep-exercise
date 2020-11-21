@@ -1,0 +1,137 @@
+Locks:
+
+	- problem in executing atomic instructions
+	
+	building block of locks-
+	What [Hardware || OS] support is needed to build locks??
+	 
+	Basic criteria of locks
+		1. provide mutual exclusion  **(CORRECTNESS)
+		2. **FAIRNESS: does other thread will acuire this lock 
+		   once other process unlocked ( starvation )
+		3. **PERFOMANCE
+		
+	Solution.
+		i. Controlling Interrupts:
+		   	- only for single processors
+		   	- re-enable interrupts after critical section ended
+		   	
+		   	positive:
+		   		- it is simple
+		   	negative:
+		   		- any thread can perform privileged ops. the 
+		   		  processor can be monopolized
+		   		- not able to run on multiple-processors
+		   		- extended period of disabling interrupts may
+		   		  damage system
+		   		- inefficient
+		   		
+	* These all are hardware primitive	   		
+	+--------------------------------------------------------
+	|	ii. Using Load and store ( failed attempt ):
+	|				flag = 0; //unlocked
+	|				while(flag == 1);
+	|				flag = 1; file locked
+	|				
+	|			- uses flag if 1 then lock held and if 0 then
+	|			  it is unlocked.
+	|		two problem:
+	|			1. Correctness: two threads can gain lock if un-timely
+	|			   interrupts occured.
+	|			2. Perfomance: spin waiting is a problem
+	|	iii. Building Working Spin locks with TEST-AND-SETS
+	|			'''
+	|				implementation of test-and-set lock
+	|				int TestAndSet(int *oldPtr, int new) {
+	|					int old = *oldPtr;
+	|					*oldPtr = new;
+	|					return old;
+	|				}
+	|				typedef struct __lock_t {
+	|					int flag;	//flag: 0 unlocked
+	|				}lock_t;
+	|				void init(lock_t *lock) {
+	|					lock->flag = 0;
+	|				}
+	|				void lock(lock_t *lock) {
+	|					while(TestAndSet(&lock->flag, 1)==1);
+	|				}
+	|				void unlock(lock_t *lock) {
+	|					lock->flag = 0;
+	|				}
+	|			'''
+	|			
+	|			Problem in Perfomance in Single CPU. {
+	|				HOW??, every thread will spin upto a timer
+	|				in preemptive scheduler and if a thread encounter
+	|				a lock it will spin in its whole timer limit
+	|				
+	|				isn't it wastage of CPU cycles.
+	|			} (however on multiple CPU it will work well)
+	|			
+	|	iv. COMPARE-AND-SWAP
+	|		(on x86 COMPARE-AND-EXCHANGE)
+	|			- checks if flag is 0 or not and if so it will swap
+	|			  and acquire lock.
+	|			
+	|	v. LOAD-LINKED AND STORE-CONDITIONAL
+	|	   (LLSC)
+	|
+	|	   		1. Load-linked: a simple load instruction { fetche 
+	|	   		   value from memory and store to reg. }
+	|	   	 	*2.Store-conditional:
+	|	   	 			- only succeeds if no intervening store to addr
+	|	   	 			  has taken place.. then
+	|	   	 				on success: return 1 && update ptr to val
+	|	   	 			- on fail: return 0
+	|			
+	|	vi. Fetch-And-Add
+	|			- ticket lock: uses 'ticket' and 'turn' variable
+	|			- this algo will ensure progress of all thread
+	|		'''
+	|			int FetchAndAdd(int *ptr) {
+	|				int old = *ptr;
+	|				*ptr = old + 1;
+	|				return old;
+	|			}
+	|			typdef struct __lock_t {
+	|				int ticket;
+	|				int turn;
+	|			} lock_t;
+	|			void lock_init(lock_t *lock){
+	|				lock->ticket = 0;
+	|				lock->turn = 0;
+	|			}
+	|			void lock(lock_t lock) {
+	|				int myturn = FetchAndAdd(lock->ticket);
+	|				while(lock->turn != myturn);
+	|			}
+	|			void unlock(lock_t lock) {
+	|				lock->turn = lock->turn
+	|			}
+	|		'''
+	+----------------------------------------------------			
+				
+	Problem:: we are still wasting time spinning on the CPU
+	          The starvation can also take place
+	          		- even if we yield at spin-lock
+	          too much we are relying on scheduler
+	          
+		vii. Using Queues: "sleeping instead of spinning":
+				- some control over which thread will acquire lock
+				  next (using Queues).
+				- thread will forced to sleep if it tries to acqire
+				  held lock and wake up when the lock is relesed.
+				 
+		
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				

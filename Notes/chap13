@@ -1,0 +1,77 @@
+The-Address-space::
+
+	The Multiprogramming era:
+	------------------------------------------------------
+	The All problem after creted for OS developer is after 
+	the use of notion of `Multiprogramming` [ multiple 
+	process running at same time]
+		1. Utilization
+		2. Efficiency
+	------------------------------------------------------
+	
+	The Timesharing Era:
+	------------------------------------------------------
+		1. Interactivity
+	Sharing time to multiple process, swtiching one proces
+	to another.
+		2. Protection
+	Process should not be able to read or write another pr
+	ocess data.
+	------------------------------------------------------
+	
+	The Address Spces is `The abstraction of Physical Mem`
+	it contains-
+		1. All memory state of running program
+		2. code of program
+		3. Stack, local variables, pass param, ret vals ..
+		3. Heap (start just after code and grow downward)
+		
+	
+----------------------------------------------------------
+Vitualizing The Memory::
+
+	The Goal for Virtualization of Memory-
+		1. Tranparency
+			All process should not be aware of virtualiza-
+			tion, it should behave that it has its own pr-
+			ivate memory.
+		2. Efficiency
+			a. Time
+				rely on hardware support
+			b. Space
+		3. Protection
+			protect on process from manipulating other pr-
+			ocess
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

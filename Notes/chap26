@@ -1,0 +1,85 @@
+<<<<<<Concurrency-Introduction>>>>>>
+
+	previously:
+   ~single-physical-cpu => 	multiple-virtual-CPU's
+   ~limited-memory		=>	private-virtual-memory
+
+NOW A PROCESS CAN HAVE MULTIPLE EXECUTION POINTS IN IT
+BY USING THREADS (MULTITHREADED SYSTEMS)::
+	- each thread is like a separate process
+		* they share the same address space
+		* they access the same data
+		* they have their own private set of registers
+		* context switch must take place (here thread control
+		  block) 
+		 	   ** but here the address space remains same (no
+		 		  switching of page tables)
+		*   Single threaded                Multiple threaded
+			+------------+                  +------------+
+			|  program   |                  |  program   |
+			|    code    |                  |    code    |
+			+------------+                  +------------+
+			|    heap    |                  |    heap    |
+			+------------+                  +------------+
+			|////////////|                  |////////////|
+			|////////////|                  |////////////|
+			|////free////|                  +------------+
+			|////////////|                  |   stack 2  |
+			|////////////|                  +------------+
+			|////////////|                  |////////////|
+			+------------+                  +------------+
+			|   stack    |                  |   stack 1  |
+			+------------+                  +------------+
+			   ** one stack(thread-local storage) for each thread..
+
+WHY TO USE THREADS::
+	- two reasons..
+		1. PARALLELISM--
+			* running a program into multiple CPU's using a thread
+			  per CPU.
+		2. Avoid blocking of process progress due to slow I/O
+		
+		
+A Quote::
+	Computer are hard enough to understand without concurrency, and 
+	with concurrency it get worse...
+		- ostep, Remzi-arpaci
+
+
+SHARED DATA::(this is just after the quote why??)
+	
+	- A race condition (or data race [NM92]) arises if multiple threads 
+	  of execution enter the critical section at roughly the same time 
+	  both attempt to update the shared data structure, leading to a 
+	  surprising (and perhaps undesirable) outcome.
+	
+	- Critical section: a piece of code that access a shared variable
+	  and must not be concurrently executed by more than on thread at
+	  a time..
+			* mutual excusion is necessary
+	
+	- A solution solved "all or none" for some atomic program
+
+One more Problem: Waiting for another..
+
+-------------------------------------end-------------------------------
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
